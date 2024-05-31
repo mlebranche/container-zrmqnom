@@ -1,12 +1,9 @@
-FROM node:20-alpine
-
-WORKDIR /app/src
-COPY . /app/src
-
-RUN npm install
-
-RUN chown -R node:node /app
-
-USER node
-
-ENTRYPOINT /app/src/entrypoint.sh
+# syntax=docker/dockerfile:1
+FROM python:3-alpine
+ENV PYTHONUNBUFFERED=1
+WORKDIR /usr/src/app
+COPY requirements.txt /usr/src/app/
+RUN pip install -U -r requirements.txt
+COPY ./web /usr/src/app/
+COPY ./entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
